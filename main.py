@@ -53,52 +53,39 @@ class Simulacao:
         self.num_desembarques += 1
 
     def report(self):
-        print ('\n*** SimPy Simulation Report ***\n')
-        print ('Total Simulation Time: %.4f' % TEMPO_SIMULACAO)
-        print ('Total Arrivals: %d' % self.num_chegadas)
-        print ('Total Departures: %d' % self.num_decolagens)
-        print ('Total Refuels: %d' % self.num_abastecimentos)
-        a = float(self.num_chegadas) / (TEMPO_SIMULACAO)
-        d = float(self.num_decolagens) / (TEMPO_SIMULACAO)
-        # vazao da pista
-        x = float(self.num_pousos) / (TEMPO_SIMULACAO)
-        # vazao do servico de abastecimento
-        xr = float(self.num_abastecimentos) / (TEMPO_SIMULACAO)
-        # vazao da pista de decolagem do aeroporto
-        xd = float(self.num_decolagens) / (TEMPO_SIMULACAO)
-        s1 = (TEMPO_POUSO) / float(self.num_pousos)
-        s2 = float(self.tempo_total_abastecimento) / float(self.num_abastecimentos)
-        s3 = (TEMPO_DECOLAGEM) / float(self.num_pousos)
-        u1 = s1 * x
-        u2 = s2 * xr
-        u3 = s3 * xd
+
+        media_chegadas = float(self.num_chegadas) / (TEMPO_SIMULACAO)
+        media_atendimento = float(self.num_decolagens) / (TEMPO_SIMULACAO)
+
         #utilização das pontes
         x_pontes = float(self.num_desembarques)/float(TEMPO_SIMULACAO)
         u_pontes = float(x_pontes)*float(TEMPO_DESEMBARQUE)
 
         #pistas
         x_pistas = float(self.num_pousos+self.num_decolagens)/float(TEMPO_SIMULACAO)
-        u_pistas = float(x_pistas)*float(TEMPO_DESEMBARQUE+TEMPO_DESEMBARQUE)
+        # u_pistas = float(x_pistas)*float(TEMPO_DESEMBARQUE+TEMPO_DESEMBARQUE)
 
-        print ('Media de chegadas: %f' % a)
-        print ('Media de saidas: %f' % d)
-        print ('Throughput da pista de pouso: %f' % x)
-        print ('Throughput do reabastecimentos: %f' % xr)
-        print ('Throughput da pista de decolagem: %f' % xd)
-        print ('Tempo medio de servico de entrada: %f' % s1)
-        print ('Tempo medio de servico de saida: %f' % s2)
-        print ('Tempo medio de servico de reabastecimento: %f' % s3)
-        print ('Utilizacao do sistema de chegadas: %f' % u1)
-        print ('Utilizacao do sistema de reabastecimento: %f' % u2)
-        print ('Utilizacao do sistema de saida: %f' % u3)
+        u4 = float(self.num_pousos*TEMPO_POUSO)/float(TEMPO_SIMULACAO)
+        u5 = float(self.num_decolagens*TEMPO_DECOLAGEM)/float(TEMPO_SIMULACAO)
+        u_pista = u4+u5
+
+        #tanques
+        x_tanque = float(self.num_abastecimentos)/float(TEMPO_SIMULACAO)
+        u_tanques = float(x_tanque)*float(TEMPO_ABASTECIMENTO)
 
 
-
-        print("<<<<<NOssas métricas>>>>>>")
-        print ('Num. médio de aviões atendidos: %f' % d)
-        print ('Tempo médio por avião no solo: %f' % (self.tempo_total_solo/self.num_decolagens))
-        print('Throughput, utilização das pontes de desemb.: %2f,%2f'%(x_pontes,u_pontes))
-        print('Throughput, utilização das pistas.: %2f,%2f' % (x_pistas, u_pistas))
+        print("<<<<<Métricas>>>>>>")
+        print ('\n*** SimPy Simulation Report ***\n')
+        print ('Total Simulation Time: %.2f (minutes)' % TEMPO_SIMULACAO)
+        print ('Total Arrivals: %d (airplanes)' % self.num_chegadas)
+        print ('Total Departures: %d' % self.num_decolagens)
+        print ('Total Refuels: %d' % self.num_abastecimentos)
+        print ('Media de chegadas: %f/min' % media_chegadas)
+        print ('Num. médio de aviões atendidos: %f/min' % media_atendimento)
+        print ('Tempo médio por avião no solo: %f min por aviao' % (self.tempo_total_solo/self.num_decolagens))
+        print('Throughput, utilização das pontes de desemb.: %.2f/min,%.2f %%'%(x_pontes,u_pontes*100))
+        print('Throughput, utilização das pistas.: %.2f,%.2f%% ' % (x_pistas, u_pista*100))
+        print('Throughput, utilização dos tanques de abastecimento: %2f,%.2f %%' % (x_tanque, u_tanques*100))
 
 class Aeroporto(object):
     def __init__(self, env,qtde_pistas,qtde_pontes,qtde_tanques,tempo_abastecimento,tempo_pouso,tempo_decolagem,tempo_desembarque):
