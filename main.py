@@ -5,13 +5,29 @@ import random
 #Variavéis da Simulação
 RANDOM_SEED = 42
 
-TEMPO_POUSO = 1 #EM MINUTOS
-TEMPO_DECOLAGEM = 2
+''' Com carga leve'''
+# TEMPO_POUSO = 1 #EM MINUTOS
+# TEMPO_DECOLAGEM = 2
+# TEMPO_ABASTECIMENTO = 2
+# TEMPO_DESEMBARQUE = 1
+#
+# A_INTER = 7 #Create a airplane every a_inter minutes
+# TEMPO_SIMULACAO = 120 #imulation time in minutes
+#
+# QTDE_PISTAS = 1
+# QTDE_PONTES = 2
+# QTDE_TANQUES = 1
+#
+# PROB_ABASTECIMENTO = 0.5
+
+'''Com carga pesada de trabalho'''
+TEMPO_POUSO = 1.5 #EM MINUTOS
+TEMPO_DECOLAGEM = 3
 TEMPO_ABASTECIMENTO = 3
-TEMPO_DESEMBARQUE = 1
+TEMPO_DESEMBARQUE = 1.5
 
 A_INTER = 4 #Create a airplane every a_inter minutes
-TEMPO_SIMULACAO = 60 #imulation time in minutes
+TEMPO_SIMULACAO = 120 #imulation time in minutes
 
 QTDE_PISTAS = 1
 QTDE_PONTES = 2
