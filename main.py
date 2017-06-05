@@ -21,7 +21,7 @@ RANDOM_SEED = 42
 # PROB_ABASTECIMENTO = 0.5
 
 '''Com carga pesada de trabalho'''
-TEMPO_POUSO = 1.5 #EM MINUTOS
+TEMPO_POUSO = 1.5  #EM MINUTOS
 TEMPO_DECOLAGEM = 3
 TEMPO_ABASTECIMENTO = 3
 TEMPO_DESEMBARQUE = 1.5
@@ -29,9 +29,9 @@ TEMPO_DESEMBARQUE = 1.5
 A_INTER = 4 #Create a airplane every a_inter minutes
 TEMPO_SIMULACAO = 120 #imulation time in minutes
 
-QTDE_PISTAS = 1
+QTDE_PISTAS = 2
 QTDE_PONTES = 2
-QTDE_TANQUES = 1
+QTDE_TANQUES = 3
 
 PROB_ABASTECIMENTO = 0.5
 
@@ -73,27 +73,27 @@ class Simulacao:
         media_chegadas = float(self.num_chegadas) / (TEMPO_SIMULACAO)
         media_atendimento = float(self.num_decolagens) / (TEMPO_SIMULACAO)
 
-        #utilização das pontes
+        # PONTES
         x_pontes = float(self.num_desembarques)/float(TEMPO_SIMULACAO)
-        u_pontes = float(x_pontes)*float(TEMPO_DESEMBARQUE)
+        u_pontes = float(x_pontes)*float(TEMPO_DESEMBARQUE) # Ui = Xi*Si
+        u_pontes /= float(QTDE_PONTES) # utilização média para pontes
 
-        #pistas
+        #PISTAS
         x_pistas = float(self.num_pousos+self.num_decolagens)/float(TEMPO_SIMULACAO)
-        # u_pistas = float(x_pistas)*float(TEMPO_DESEMBARQUE+TEMPO_DESEMBARQUE)
-
-        u4 = float(self.num_pousos*TEMPO_POUSO)/float(TEMPO_SIMULACAO)
-        u5 = float(self.num_decolagens*TEMPO_DECOLAGEM)/float(TEMPO_SIMULACAO)
-        u_pista = u4+u5
+        u_pista = (float(self.num_pousos*TEMPO_POUSO)+float(self.num_decolagens*TEMPO_DECOLAGEM))/float(TEMPO_SIMULACAO) # Bi/T
+        u_pista /= float(QTDE_PISTAS)
 
         #tanques
         x_tanque = float(self.num_abastecimentos)/float(TEMPO_SIMULACAO)
         u_tanques = float(x_tanque)*float(TEMPO_ABASTECIMENTO)
+        u_tanques /= float(QTDE_TANQUES)
 
 
         print("<<<<<Métricas>>>>>>")
         print ('\n*** SimPy Simulation Report ***\n')
         print ('Total Simulation Time: %.2f (minutes)' % TEMPO_SIMULACAO)
         print ('Total Arrivals: %d (airplanes)' % self.num_chegadas)
+        print ('Total Pouso: %d' % self.num_pousos)
         print ('Total Departures: %d' % self.num_decolagens)
         print ('Total Refuels: %d' % self.num_abastecimentos)
         print ('Media de chegadas: %f/min' % media_chegadas)
